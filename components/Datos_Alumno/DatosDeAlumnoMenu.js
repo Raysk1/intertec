@@ -1,21 +1,20 @@
 import * as React from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import { StyleSheet, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Box, NativeBaseProvider, Text, Button } from "native-base";
-const { height, width } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
+import { ScaledSheet, scale } from "react-native-size-matters";
 
 export default function DatosDeAlumnoMenu() {
   const navigation = useNavigation();
-  const route = useRoute();
-
 
   return (
     <NativeBaseProvider>
       <LinearGradient
-        colors={[ "#5c26b8","#7ccefa",]}
+        colors={["#5c26b8", "#7ccefa"]}
         style={styles.headerBackground}
       ></LinearGradient>
       <Box style={styles.imageContainer}>
@@ -28,7 +27,9 @@ export default function DatosDeAlumnoMenu() {
 
       <Box style={styles.menuContainer}>
         <Box style={styles.dataContainer}>
-          <Text style={styles.userName}>{global.alumno.datosGenerales.nombre}</Text>
+          <Text style={styles.userName}>
+            {global.alumno.datosGenerales.nombre}
+          </Text>
           <LinearGradient
             colors={["#7ccefa", "#5c26b8"]}
             style={styles.userNumControlContainer}
@@ -36,36 +37,45 @@ export default function DatosDeAlumnoMenu() {
             <Text style={styles.userNumControl}>{global.alumno.control}</Text>
           </LinearGradient>
         </Box>
-        <LinearGradient style={styles.menuButtonsContainer} colors={["#7ccefa", "#5c26b8"]} >
+        <LinearGradient
+          style={styles.menuButtonsContainer}
+          colors={["#7ccefa", "#5c26b8"]}
+        >
           <Button
             style={styles.button}
             _text={styles.buttonText}
-            startIcon={<Ionicons name="person" size={height / 24}></Ionicons>}
-            _pressed={{backgroundColor: "gray.300"}}
+            startIcon={<Ionicons name="person" size={scale(30)}></Ionicons>}
+            _pressed={{ backgroundColor: "gray.300" }}
             backgroundColor={"gray.100"}
-            onPress={()=>{navigation.navigate("DatosGenerales");}}
-            
+            onPress={() => {
+              navigation.navigate("DatosGenerales");
+            }}
           >
             Datos Generales
           </Button>
           <Button
             style={styles.button}
             _text={styles.buttonText}
-            startIcon={<Ionicons name="finger-print" size={height / 24}></Ionicons>}
-            _pressed={{backgroundColor: "gray.300"}}
+            startIcon={
+              <Ionicons name="finger-print" size={scale(30)}></Ionicons>
+            }
+            _pressed={{ backgroundColor: "gray.300" }}
             backgroundColor={"gray.100"}
-            onPress={()=>{navigation.navigate("DatosPersonales");}}
-            
+            onPress={() => {
+              navigation.navigate("DatosPersonales");
+            }}
           >
             Datos Personales
           </Button>
           <Button
             style={styles.button}
             _text={styles.buttonText}
-            startIcon={<Ionicons name="school" size={height / 24}></Ionicons>}
-            _pressed={{backgroundColor: "gray.300"}}
+            startIcon={<Ionicons name="school" size={scale(30)}></Ionicons>}
+            _pressed={{ backgroundColor: "gray.300" }}
             backgroundColor={"gray.100"}
-            onPress={()=>{navigation.navigate("DatosAcademicos");}}
+            onPress={() => {
+              navigation.navigate("DatosAcademicos");
+            }}
           >
             Datos Academicos
           </Button>
@@ -75,12 +85,12 @@ export default function DatosDeAlumnoMenu() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   headerBackground: {
     width: "100%",
     height: "26%",
-    borderBottomLeftRadius: width / 5,
-    borderBottomRightRadius: width / 5,
+    borderBottomLeftRadius: 90,
+    borderBottomRightRadius: 90,
     borderBottomEndRadius: 0,
     borderBottomStartRadius: 0,
     overflow: "hidden",
@@ -106,50 +116,51 @@ const styles = StyleSheet.create({
   menuContainer: {
     top: "10%",
     alignItems: "center",
-    
+
     height: "67%",
   },
   userName: {
-    paddingTop: "3%",
+    paddingTop: "7%",
     fontWeight: "bold",
-    fontSize: width / 14,
+    fontSize: "22@vs",
     textAlign: "center",
-    lineHeight: width*.1,
+    lineHeight: "23@vs",
   },
   dataContainer: {
     alignItems: "center",
     paddingHorizontal: "8%",
   },
   userNumControl: {
-    fontSize: width / 18,
-    padding: "3%",
+    fontSize: "17@vs",
+    padding: "5%",
     color: "#FFFF",
     fontWeight: "bold",
   },
   userNumControlContainer: {
-    borderRadius: width / 2,
-    marginTop: "2%",
+    borderRadius: 100,
+    marginTop: "4%",
   },
   menuButtonsContainer: {
     width: "100%",
-    margin:"5%",
+    margin: "5%",
     flex: 1,
     alignItems: "center",
     justifyContent: "space-evenly",
-    
-    borderTopLeftRadius: width / 5,
-    borderTopRightRadius: width / 5,
+
+    borderTopLeftRadius: 90,
+    borderTopRightRadius: 90,
     borderTopEndRadius: 0,
     borderTopStartRadius: 0,
   },
   button: {
-    borderRadius: width / 2,
-  
+    borderRadius: 100,
+
     width: "70%",
   },
   buttonText: {
     color: "black",
-    fontSize: width / 18,
-    fontWeight: "bold"
+    fontSize: "18@s",
+    fontWeight: "bold",
+    paddingLeft: "2%",
   },
 });

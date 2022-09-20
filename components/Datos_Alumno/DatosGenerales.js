@@ -1,10 +1,8 @@
 /* eslint-disable no-undef */
 import * as React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-
-import { StyleSheet, Dimensions } from "react-native";
-import { Box, NativeBaseProvider, Text, Button } from "native-base";
-const { height, width } = Dimensions.get("window");
+import { Box, NativeBaseProvider, Text } from "native-base";
+import { ScaledSheet } from "react-native-size-matters";
 
 export default function DatosGenerales() {
   return (
@@ -22,9 +20,7 @@ export default function DatosGenerales() {
           </Box>
           <Box>
             <Text style={styles.title}>NUMERO DE CONTROL:</Text>
-            <Text style={styles.data}>
-              {global.alumno.control}
-            </Text>
+            <Text style={styles.data}>{global.alumno.control}</Text>
           </Box>
           <Box>
             <Text style={styles.title}>CURP:</Text>
@@ -60,7 +56,7 @@ export default function DatosGenerales() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     width: "84%",
     height: "90%",
@@ -72,13 +68,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: width * 0.065,
+    fontSize: "20@vs",
     textAlign: "center",
-    lineHeight: width * 0.08,
+    paddingTop: "2.5@vs",
+    marginBottom: "4@vs",
   },
   data: {
-    fontSize: width * 0.05,
+    fontSize: "15@vs",
     textAlign: "center",
-    lineHeight: width * 0.08,
+    paddingTop: "2@vs",
   },
 });

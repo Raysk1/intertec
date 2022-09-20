@@ -1,11 +1,7 @@
-/* eslint-disable no-undef */
 import * as React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-
-import { StyleSheet, Dimensions } from "react-native";
-import { Box, NativeBaseProvider, Text, Button } from "native-base";
-const { height, width } = Dimensions.get("window");
-
+import { Box, NativeBaseProvider, Text } from "native-base";
+import { ScaledSheet } from "react-native-size-matters";
 export default function DatosAcademicos() {
   return (
     <NativeBaseProvider>
@@ -50,14 +46,13 @@ export default function DatosAcademicos() {
               {global.alumno.datosAcademicos.situacion}
             </Text>
           </Box>
-          
         </Box>
       </LinearGradient>
     </NativeBaseProvider>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = ScaledSheet.create({
   container: {
     width: "84%",
     height: "90%",
@@ -69,13 +64,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    fontSize: width * 0.065,
+    fontSize: "20@vs",
     textAlign: "center",
-    lineHeight: width * 0.08,
+    paddingTop: "2.5@vs",
+    marginBottom: "4@vs",
   },
   data: {
-    fontSize: width * 0.05,
+    fontSize: "15@vs",
     textAlign: "center",
-    lineHeight: width * 0.08,
+    paddingTop: "2@vs",
   },
 });

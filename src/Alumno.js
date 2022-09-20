@@ -1,7 +1,9 @@
+
+// eslint-disable-next-line no-undef
 var DomParser = require("react-native-html-parser").DOMParser;
 
 class Alumno {
-  constructor(control: String, password: String) {
+  constructor(control, password) {
     this.password = password;
     this.control = control;
     this.datosGenerales = {
@@ -43,7 +45,7 @@ class Alumno {
     };
   }
 
-  async LoadHTML(url: String) {
+  async LoadHTML(url) {
     const response = await fetch(url, {
       method: "GET",
       headers: {
@@ -173,7 +175,7 @@ class Alumno {
     for (let i = 0; i < trs.length - 4; i++) {
       const tr = trs[i];
       const tds = tr.getElementsBySelector("TD");
-      const horaAulaArray = tds[7].textContent.split(" ");
+      let horaAulaArray = tds[7].textContent.split(" ");
       this.horario.lunes.push({
         materia: tds[1].textContent.trim(),
         hora: horaAulaArray[0],
