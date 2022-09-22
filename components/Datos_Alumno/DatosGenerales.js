@@ -8,7 +8,7 @@ export default function DatosGenerales() {
   return (
     <NativeBaseProvider>
       <LinearGradient
-        colors={["#7ccefa", "#5c26b8"]}
+        colors={["#14213d", "#000000"]}
         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
       >
         <Box style={styles.container}>
@@ -60,7 +60,7 @@ const styles = ScaledSheet.create({
   container: {
     width: "84%",
     height: "90%",
-    backgroundColor: "#FFFF",
+    backgroundColor: "#FFFFFF",
     borderRadius: 30,
     alignItems: "center",
     padding: "4%",

@@ -17,17 +17,26 @@ export default function InformacionDeAlumno() {
       <Stack.Screen
         name="DatosGenerales"
         component={DatosGenerales}
-        options={{ headerTitle: "Datos Generales" }}
+        options={{
+          headerTitle: "Datos Generales",
+          headerStyle: { backgroundColor: "#E5E5E5" },
+        }}
       />
       <Stack.Screen
         name="DatosPersonales"
         component={DatosPersonales}
-        options={{ headerTitle: "Datos Personales" }}
+        options={{
+          headerTitle: "Datos Personales",
+          headerStyle: { backgroundColor: "#E5E5E5" },
+        }}
       />
       <Stack.Screen
         name="DatosAcademicos"
         component={DatosAcademicos}
-        options={{ headerTitle: "Datos Academicos" }}
+        options={{
+          headerTitle: "Datos Academicos",
+          headerStyle: { backgroundColor: "#E5E5E5" },
+        }}
       />
     </Stack.Navigator>
   );

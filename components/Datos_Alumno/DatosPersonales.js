@@ -8,7 +8,7 @@ export default function DatosPersonales() {
   return (
     <NativeBaseProvider>
       <LinearGradient
-        colors={["#7ccefa", "#5c26b8"]}
+        colors={["#14213d", "#000000"]}
         style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
       >
         <Box style={styles.container}>

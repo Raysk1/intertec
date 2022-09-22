@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-
 import { Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Box, NativeBaseProvider, Text, Button } from "native-base";
@@ -13,73 +12,72 @@ export default function DatosDeAlumnoMenu() {
 
   return (
     <NativeBaseProvider>
-      <LinearGradient
-        colors={["#5c26b8", "#7ccefa"]}
-        style={styles.headerBackground}
-      ></LinearGradient>
-      <Box style={styles.imageContainer}>
-        <Box style={styles.image}>
-          <Text color={"#FFFF"} fontSize={height / 8}>
-            {global.alumno.datosGenerales.nombre.charAt(0)}
-          </Text>
+      <Box backgroundColor={"#e5e5e5"} flex={1}>
+        <LinearGradient
+          colors={["#000000", "#14213d"]}
+          style={styles.headerBackground}
+        ></LinearGradient>
+        <Box style={styles.imageContainer}>
+          <Box style={styles.image}>
+            <Text color={"#FFFF"} fontSize={height / 8}>
+              {global.alumno.datosGenerales.nombre.charAt(0)}
+            </Text>
+          </Box>
         </Box>
-      </Box>
 
-      <Box style={styles.menuContainer}>
-        <Box style={styles.dataContainer}>
-          <Text style={styles.userName}>
-            {global.alumno.datosGenerales.nombre}
-          </Text>
+        <Box style={styles.menuContainer}>
+          <Box style={styles.dataContainer}>
+            <Text style={styles.userName}>
+              {global.alumno.datosGenerales.nombre}
+            </Text>
+            <Box style={styles.userNumControlContainer} borderRadius={100}>
+              <Text style={styles.userNumControl}>{global.alumno.control}</Text>
+            </Box>
+          </Box>
           <LinearGradient
-            colors={["#7ccefa", "#5c26b8"]}
-            style={styles.userNumControlContainer}
+            style={styles.menuButtonsContainer}
+            colors={["#14213d", "#000000"]}
           >
-            <Text style={styles.userNumControl}>{global.alumno.control}</Text>
+            <Button
+              style={styles.button}
+              _text={styles.buttonText}
+              startIcon={<Ionicons name="person" size={scale(30)}></Ionicons>}
+              _pressed={{ backgroundColor: "gray.300" }}
+              backgroundColor={"gray.100"}
+              onPress={() => {
+                navigation.navigate("DatosGenerales");
+              }}
+            >
+              Datos Generales
+            </Button>
+            <Button
+              style={styles.button}
+              _text={styles.buttonText}
+              startIcon={
+                <Ionicons name="finger-print" size={scale(30)}></Ionicons>
+              }
+              _pressed={{ backgroundColor: "gray.300" }}
+              backgroundColor={"gray.100"}
+              onPress={() => {
+                navigation.navigate("DatosPersonales");
+              }}
+            >
+              Datos Personales
+            </Button>
+            <Button
+              style={styles.button}
+              _text={styles.buttonText}
+              startIcon={<Ionicons name="school" size={scale(30)}></Ionicons>}
+              _pressed={{ backgroundColor: "gray.300" }}
+              backgroundColor={"gray.100"}
+              onPress={() => {
+                navigation.navigate("DatosAcademicos");
+              }}
+            >
+              Datos Academicos
+            </Button>
           </LinearGradient>
         </Box>
-        <LinearGradient
-          style={styles.menuButtonsContainer}
-          colors={["#7ccefa", "#5c26b8"]}
-        >
-          <Button
-            style={styles.button}
-            _text={styles.buttonText}
-            startIcon={<Ionicons name="person" size={scale(30)}></Ionicons>}
-            _pressed={{ backgroundColor: "gray.300" }}
-            backgroundColor={"gray.100"}
-            onPress={() => {
-              navigation.navigate("DatosGenerales");
-            }}
-          >
-            Datos Generales
-          </Button>
-          <Button
-            style={styles.button}
-            _text={styles.buttonText}
-            startIcon={
-              <Ionicons name="finger-print" size={scale(30)}></Ionicons>
-            }
-            _pressed={{ backgroundColor: "gray.300" }}
-            backgroundColor={"gray.100"}
-            onPress={() => {
-              navigation.navigate("DatosPersonales");
-            }}
-          >
-            Datos Personales
-          </Button>
-          <Button
-            style={styles.button}
-            _text={styles.buttonText}
-            startIcon={<Ionicons name="school" size={scale(30)}></Ionicons>}
-            _pressed={{ backgroundColor: "gray.300" }}
-            backgroundColor={"gray.100"}
-            onPress={() => {
-              navigation.navigate("DatosAcademicos");
-            }}
-          >
-            Datos Academicos
-          </Button>
-        </LinearGradient>
       </Box>
     </NativeBaseProvider>
   );
@@ -106,7 +104,7 @@ const styles = ScaledSheet.create({
   },
   image: {
     borderRadius: 100,
-    backgroundColor: "red",
+    backgroundColor: "#fca311",
     width: height / 5,
     height: height / 5,
     overflow: "hidden",
@@ -139,6 +137,7 @@ const styles = ScaledSheet.create({
   userNumControlContainer: {
     borderRadius: 100,
     marginTop: "4%",
+    backgroundColor: "#14213d",
   },
   menuButtonsContainer: {
     width: "100%",

@@ -4,9 +4,7 @@ import * as NB from "native-base";
 import MensajeDeError from "./MensajeDeError";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScaledSheet } from "react-native-size-matters";
-
 import { Dimensions } from "react-native";
-import Constants from "expo-constants";
 import Alumno from "../src/Alumno";
 import { useNavigation } from "@react-navigation/native";
 
@@ -71,7 +69,7 @@ const InicioDeSesion = () => {
         enable={errorStatus.isActive}
         mensaje={errorStatus.message}
       />
-      <LinearGradient colors={["#7ccefa", "#5c26b8"]} style={{ flex: 1 }}>
+      <LinearGradient colors={["#14213d", "#000000"]} style={{ flex: 1 }}>
         <KeyboardAwareScrollView>
           <NB.Box style={styles.container}>
             <NB.Box style={styles.titleContainer}>
@@ -138,7 +136,7 @@ const InicioDeSesion = () => {
                 onPress={onSubmit}
                 style={styles.button}
                 _text={styles.buttonText}
-                colorScheme="cyan"
+                backgroundColor={"#14213d"}
               >
                 Ingresar
               </NB.Button>
@@ -169,7 +167,7 @@ const styles = ScaledSheet.create({
     padding: "10%",
     height: "100%",
     width: "100%",
-    paddingTop: Constants.statusBarHeight + height * 0.05,
+    paddingTop: "10%",
   },
   input: {
     fontSize: "12@vs",
@@ -187,8 +185,8 @@ const styles = ScaledSheet.create({
   },
   image: {
     borderRadius: 100,
-    height: "175@vs",
-    width: "175@vs",
+    height: "180@vs",
+    width: "180@vs",
   },
   formLabel: {
     fontSize: "13@vs",
@@ -202,6 +200,7 @@ const styles = ScaledSheet.create({
   },
   buttonText: {
     fontSize: "13@vs",
+    fontWeight: "bold",
   },
 });
 

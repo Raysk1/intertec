@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import { StatusBar } from "react-native";
 import InicioDeSesion from "./components/InicioDeSesion";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -10,6 +10,7 @@ function App() {
   const Stack = createNativeStackNavigator();
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar />
       <NavigationContainer>
         <Stack.Navigator initialRouteName="InicioDeSesion">
           <Stack.Screen

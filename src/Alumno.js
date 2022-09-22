@@ -1,4 +1,3 @@
-
 // eslint-disable-next-line no-undef
 var DomParser = require("react-native-html-parser").DOMParser;
 
@@ -36,13 +35,7 @@ class Alumno {
     };
 
     this.kardex = [];
-    this.horario = {
-      lunes: [],
-      martes: [],
-      miercoles: [],
-      jueves: [],
-      viernes: [],
-    };
+    this.horario = [];
   }
 
   async LoadHTML(url) {
@@ -83,7 +76,7 @@ class Alumno {
 
     await this.ObtenerDatosDeAlumno();
     //his.ObtenerKardex();
-    //this.ObtenerHorario();
+    this.ObtenerHorario();
     return true;
   }
 
@@ -175,36 +168,21 @@ class Alumno {
     for (let i = 0; i < trs.length - 4; i++) {
       const tr = trs[i];
       const tds = tr.getElementsBySelector("TD");
-      let horaAulaArray = tds[7].textContent.split(" ");
-      this.horario.lunes.push({
-        materia: tds[1].textContent.trim(),
-        hora: horaAulaArray[0],
-        aula: horaAulaArray[1],
-      });
-      horaAulaArray = tds[8].textContent.split(" ");
-      this.horario.martes.push({
-        materia: tds[1].textContent.trim(),
-        hora: horaAulaArray[0],
-        aula: horaAulaArray[1],
-      });
-      horaAulaArray = tds[9].textContent.split(" ");
-      this.horario.miercoles.push({
-        materia: tds[1].textContent.trim(),
-        hora: horaAulaArray[0],
-        aula: horaAulaArray[1],
-      });
-      horaAulaArray = tds[10].textContent.split(" ");
-      this.horario.jueves.push({
-        materia: tds[1].textContent.trim(),
-        hora: horaAulaArray[0],
-        aula: horaAulaArray[1],
-      });
-      horaAulaArray = tds[11].textContent.split(" ");
-      this.horario.viernes.push({
-        materia: tds[1].textContent.trim(),
-        hora: horaAulaArray[0],
-        aula: horaAulaArray[1],
-      });
+
+      for (let j = 7; j <= 11; j++) {
+        let horaAulaArray = tds[j].textContent.split(" ");
+        let aula = horaAulaArray[1];
+        let hora = horaAulaArray[0].split("-");
+        if (horaAulaArray[0] != "") {
+          this.horario.push({
+            materia: tds[1].textContent.trim(),
+            horaEntrada: hora[0],
+            horaSalida: hora[1],
+            aula: aula,
+            dia: j - 6,
+          });
+        }
+      }
     }
   }
 }
