@@ -14,6 +14,7 @@ const InicioDeSesion = () => {
   const [errorStatus, setErrorStatus] = React.useState({
     isActive: false,
     message: "",
+    status: "",
   });
   const navigation = useNavigation();
   const [formData, setData] = React.useState({ control: "", password: "" });
@@ -36,6 +37,7 @@ const InicioDeSesion = () => {
   };
 
   const onSubmit = async () => {
+    let status;
     if (validate()) {
       global.alumno = new Alumno(formData["control"], formData["password"]);
       setLoading(true);
@@ -43,20 +45,27 @@ const InicioDeSesion = () => {
         if (await global.alumno.validarInicioInicioDeSecion()) {
           navigation.navigate("Home");
         } else {
+          status = "warning";
           setErrorStatus({
             isActive: true,
             message: "Usuario o contraseña incorrecto",
+            status: status,
           });
+          console.log(errorStatus.message);
         }
       } catch (error) {
+        status = "error";
         console.log(error);
-        setErrorStatus({ isActive: true, message: "Error de conexion" });
+        setErrorStatus({
+          isActive: true,
+          message: "Error de conexion",
+          status: status,
+        });
       } finally {
         setTimeout(
-          () => setErrorStatus({ isActive: false, message: "" }),
-          4000
+          () => setErrorStatus({ isActive: false, status: status }),
+          6000
         );
-
         setLoading(false);
       }
     }
@@ -68,6 +77,7 @@ const InicioDeSesion = () => {
       <MensajeDeError
         enable={errorStatus.isActive}
         mensaje={errorStatus.message}
+        status={errorStatus.status}
       />
       <LinearGradient colors={["#14213d", "#000000"]} style={{ flex: 1 }}>
         <KeyboardAwareScrollView>
@@ -85,7 +95,6 @@ const InicioDeSesion = () => {
               style={styles.formContainer}
               pointerEvents={isLoading ? "none" : "auto"}
             >
-              {isLoading ? <NB.Spinner size={"lg"} /> : null}
               <NB.FormControl isRequired isInvalid={errors["control"] != ""}>
                 <NB.FormControl.Label _text={styles.formLabel}>
                   Numero de control:
@@ -136,7 +145,8 @@ const InicioDeSesion = () => {
                 onPress={onSubmit}
                 style={styles.button}
                 _text={styles.buttonText}
-                backgroundColor={"#14213d"}
+                isLoading={isLoading}
+                isLoadingText={"Cargando"}
               >
                 Ingresar
               </NB.Button>
@@ -197,6 +207,7 @@ const styles = ScaledSheet.create({
   },
   button: {
     marginTop: "10%",
+    backgroundColor: "#14213d",
   },
   buttonText: {
     fontSize: "13@vs",

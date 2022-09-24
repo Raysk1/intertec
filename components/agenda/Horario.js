@@ -173,13 +173,14 @@ export default class Horario extends React.Component {
             gridColumnStyle={this.styles.gridColum}
             gridRowStyle={this.styles.gridRow}
             headerStyle={this.styles.header}
-            nowLineColor={"#FFFF"}
+            nowLineColor={"black"}
             eventContainerStyle={this.styles.eventContainer}
             EventComponent={EventItem}
             onEventPress={(event) => {
               this.setState({ showModal: true });
               this.setState({ event: event });
             }}
+            selectedDate={this.events[0].startDate}
           />
         </LinearGradient>
       </NativeBaseProvider>

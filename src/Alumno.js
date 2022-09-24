@@ -34,7 +34,12 @@ class Alumno {
       situacion: "",
     };
 
-    this.kardex = [];
+    this.kardex = {
+      datos: [],
+      promedio: 0,
+      creditos: { totales: 0, obtenidos: 0 },
+      avance: 0 //porcentaje de avance
+    };
     this.horario = [];
   }
 
@@ -75,7 +80,7 @@ class Alumno {
     this.password = pass.substr(0, pass.length - 8);
 
     await this.ObtenerDatosDeAlumno();
-    //his.ObtenerKardex();
+    this.ObtenerKardex();
     this.ObtenerHorario();
     return true;
   }
@@ -146,13 +151,26 @@ class Alumno {
     for (let i = 5; i < trs.length - 4; i++) {
       const tr = trs[i];
       const tds = tr.getElementsBySelector("TD");
-      this.kardex.push({
+      this.kardex.datos.push({
         clave: tds[0].textContent.trim(),
         materia: tds[1].textContent.trim(),
         calificacion: tds[2].textContent.trim(),
         periodo: tds[5].textContent.trim(),
       });
     }
+    //obteniendo el promedio
+    let tds = trs[trs.length - 4].getElementsBySelector("TD");
+    this.kardex.promedio = tds[2].textContent.substr(0, 6).trim();
+
+    //obteniendo los creditos
+    tds = trs[trs.length - 3].getElementsBySelector("TD");
+    let creditos = tds[0].textContent.replace("Creditos Acumulados","").trim().split(" de ");
+    this.kardex.creditos = {obtenidos: creditos[0], totales: creditos[1]};
+
+    //obteniendo el porcentaje de avance
+    tds = trs[trs.length - 2].getElementsBySelector("TD");
+    this.kardex.avance= tds[0].textContent.replace("% de avance:","").trim();
+    console.log(this.kardex);
   }
 
   async ObtenerHorario() {

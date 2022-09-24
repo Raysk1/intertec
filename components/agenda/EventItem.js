@@ -16,6 +16,7 @@ const styles = ScaledSheet.create({
   container: {
     justifyContent: "space-evenly",
     alignItems: "center",
+    flex:1
   },
   descriptionText: {
     fontSize: "8@s",

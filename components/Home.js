@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dimensions } from "react-native";
+
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import InformacionDeAlumno from "./Datos_Alumno/InformacionDeAlumno";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,7 +9,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { verticalScale } from "react-native-size-matters";
 
 const Tab = createBottomTabNavigator();
-const { height } = Dimensions.get("window");
 export default function Home() {
   return (
     <Tab.Navigator
@@ -18,19 +17,19 @@ export default function Home() {
         tabBarItemStyle: {},
         tabBarInactiveTintColor: "#14213D",
         tabBarActiveTintColor: "#FCA311",
-        tabBarLabelStyle: { fontSize: height * 0.02 },
+        tabBarLabelStyle: { fontSize: verticalScale(15) },
       }}
     >
       <Tab.Screen
         name="InformacionDeAlumno"
         component={InformacionDeAlumno}
         options={() => ({
-          tabBarIcon: ({ color }) => {
+          tabBarIcon: ({ color, focused }) => {
             // You can return any component that you like here!
             return (
               <Ionicons
-                name={"person-circle"}
-                size={verticalScale(30)}
+                name={focused ? "person-circle" : "person-circle-outline"}
+                size={verticalScale(25)}
                 color={color}
               />
             );
@@ -44,10 +43,14 @@ export default function Home() {
         name="Horario"
         component={Horario}
         options={() => ({
-          tabBarIcon: ({ color }) => {
+          tabBarIcon: ({ color, focused }) => {
             // You can return any component that you like here!
             return (
-              <Ionicons name={"time"} size={verticalScale(30)} color={color} />
+              <Ionicons
+                name={focused ? "time" : "time-outline"}
+                size={verticalScale(25)}
+                color={color}
+              />
             );
           },
           headerShown: false,
@@ -58,12 +61,14 @@ export default function Home() {
         name="Kardex"
         component={Kardex}
         options={() => ({
-          tabBarIcon: ({ color }) => {
+          tabBarIcon: ({ color, focused }) => {
             // You can return any component that you like here!
             return (
               <MaterialCommunityIcons
-                name={"newspaper-variant"}
-                size={verticalScale(30)}
+                name={
+                  focused ? "newspaper-variant" : "newspaper-variant-outline"
+                }
+                size={verticalScale(25)}
                 color={color}
               />
             );
