@@ -6,7 +6,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { ScaledSheet } from "react-native-size-matters";
 import { Dimensions } from "react-native";
 import Alumno from "../src/Alumno";
-import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { Login } from "../src/store/actions";
 
 const { height } = Dimensions.get("window");
 const InicioDeSesion = () => {
@@ -16,7 +17,7 @@ const InicioDeSesion = () => {
     message: "",
     status: "",
   });
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [formData, setData] = React.useState({ control: "", password: "" });
   const [errors, setErrors] = React.useState({ control: "", password: "" });
 
@@ -39,11 +40,12 @@ const InicioDeSesion = () => {
   const onSubmit = async () => {
     let status;
     if (validate()) {
-      global.alumno = new Alumno(formData["control"], formData["password"]);
+      let alumno = new Alumno(formData["control"], formData["password"]);
       setLoading(true);
       try {
-        if (await global.alumno.validarInicioInicioDeSecion()) {
-          navigation.navigate("Home");
+        let isLogged = await alumno.validarInicioInicioDeSecion()
+        if (isLogged) {
+          dispatch(Login(alumno));
         } else {
           status = "warning";
           setErrorStatus({
@@ -181,7 +183,7 @@ const styles = ScaledSheet.create({
   },
   input: {
     fontSize: "12@vs",
-    height: "30@vs",
+    height: "35@vs",
   },
 
   title: {
@@ -208,6 +210,7 @@ const styles = ScaledSheet.create({
   button: {
     marginTop: "10%",
     backgroundColor: "#14213d",
+    
   },
   buttonText: {
     fontSize: "13@vs",

@@ -16,17 +16,18 @@ const styles = ScaledSheet.create({
   container: {
     justifyContent: "space-evenly",
     alignItems: "center",
-    flex:1
+    flex:1,
+    padding:"10%"
   },
   descriptionText: {
-    fontSize: "8@s",
-    color: "#FFFFFF",
+    fontSize: "10@s",
+    color: "black",
     fontWeight: "bold",
     textAlign: "center",
   },
   locationText: {
     fontSize: "12@s",
-    color: "#FFFFFF",
+    color: "black",
     fontWeight: "bold",
   },
 });

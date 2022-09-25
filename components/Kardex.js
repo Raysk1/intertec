@@ -13,7 +13,9 @@ import {
 } from "native-base";
 import { ScaledSheet, verticalScale, scale } from "react-native-size-matters";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import {TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity, Dimensions } from "react-native";
+const { height, width } = Dimensions.get("screen");
 
 export default function Kardex() {
   const [isShowPercent, setShowPercent] = React.useState(false);
@@ -86,6 +88,22 @@ export default function Kardex() {
     );
   };
 
+  const EmptyKardex = () => {
+    return (
+      <Center style={styles.emptyKardexContainer}>
+        <Box style={styles.EmptyKardexIconContainer}>
+        <Ionicons name="md-alert-outline" size={verticalScale(60)} color="#FFFFFF"/ >
+        </Box>
+        
+        <Box style={styles.emptyKardexTextContainer}> 
+          <Text style={styles.emptyKardexText}>
+            NO HAY MATERIAS EN LA RETICULA
+          </Text>
+        </Box>
+      </Center>
+    );
+  };
+
   return (
     <NativeBaseProvider>
       <LinearGradient
@@ -94,7 +112,11 @@ export default function Kardex() {
       >
         <Card />
 
-        <FlatList data={global.alumno.kardex.datos} renderItem={KardexItem} />
+        <FlatList
+          data={global.alumno.kardex.datos}
+          renderItem={KardexItem}
+          ListEmptyComponent={EmptyKardex}
+        />
 
         <Box style={styles.progressContainer}>
           {isShowPercent ? (
@@ -138,7 +160,7 @@ export default function Kardex() {
               leftIcon={
                 <MaterialCommunityIcons
                   name="rotate-3d-variant"
-                  size={verticalScale(25)}
+                  size={verticalScale(15)}
                   color="black"
                 />
               }
@@ -187,6 +209,33 @@ const styles = ScaledSheet.create({
     width: "60%",
     backgroundColor: "#E5E5E5",
   },
+  emptyKardexText: {
+    fontSize: "20@vs",
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    padding: "5%",
+    textAlign:"center",
+    lineHeight:"25@vs"
+  },
+  emptyKardexContainer: {
+    width: width,
+    height: height * 0.84,
+  },
+  emptyKardexTextContainer:{
+    backgroundColor:"#FCA311",
+    marginTop:"10%",
+    borderRadius:100,
+    justifyContent:"center"
+
+  },
+  EmptyKardexIconContainer:{
+    backgroundColor:"#FCA311",
+    width:"90@vs",
+    height:"90@vs",
+    borderRadius:100,
+    alignItems:"center",
+    justifyContent:"center"
+  }
 });
 
 const styles1 = ScaledSheet.create({
@@ -199,9 +248,8 @@ const styles1 = ScaledSheet.create({
     alignSelf: "center",
   },
   textContainer: {
-    paddingVertical: "5%",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent:"center",
     height: "45@vs",
   },
   calificacionContainer: {
@@ -213,6 +261,7 @@ const styles1 = ScaledSheet.create({
   },
   text: {
     fontWeight: "bold",
-    fontSize: "15@s",
+    fontSize: "15@vs",
+    color: "#000000"
   },
 });

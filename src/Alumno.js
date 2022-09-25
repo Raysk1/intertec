@@ -1,10 +1,13 @@
 // eslint-disable-next-line no-undef
-var DomParser = require("react-native-html-parser").DOMParser;
+const IDOMParser = require("advanced-html-parser");
+import iconv from "iconv-lite";
+import { Buffer } from "buffer";
 
 class Alumno {
   constructor(control, password) {
     this.password = password;
     this.control = control;
+    this.passwordToken = "";
     this.datosGenerales = {
       nombre: "",
       curp: "",
@@ -21,7 +24,7 @@ class Alumno {
       cp: "",
       fechaDeNacimiento: "",
       correoPersonal: "",
-      correoInstitucional: control + "@eldorado.tecnm.mx",
+      correoInstitucional: control + "@eldorado.tecnm.mx".toUpperCase(),
       telefono: "",
     };
 
@@ -38,22 +41,39 @@ class Alumno {
       datos: [],
       promedio: 0,
       creditos: { totales: 0, obtenidos: 0 },
-      avance: 0 //porcentaje de avance
+      avance: 0, //porcentaje de avance
     };
     this.horario = [];
+    
+  }
+
+  fetchXML(url) {
+    return new Promise((resolve, reject) => {
+      const request = new XMLHttpRequest();
+
+      request.onload = () => {
+        if (request.status === 200) {
+          resolve(iconv.decode(Buffer.from(request.response), "iso-8859-1"));
+        } else {
+          reject(new Error(request.statusText));
+        }
+      };
+      request.onerror = () => reject(new Error(request.statusText));
+      request.responseType = "arraybuffer";
+
+      request.open("GET", url);
+      request.setRequestHeader(
+        "Content-type",
+        "text/html; charset=ISO-8859-15S"
+      );
+      request.send();
+    });
   }
 
   async LoadHTML(url) {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "text/plain",
-      },
-    }); // fetch page
-
-    const htmlString = await response.text(); // get response text
-
-    return htmlString;
+    const request = await this.fetchXML(url);
+    let html = request.toUpperCase();
+    return html;
   }
 
   async validarInicioInicioDeSecion() {
@@ -65,23 +85,26 @@ class Alumno {
       "&aceptar=ACEPTAR";
 
     //const url = 'http://201.164.155.162/cgi-bin/sie.pl?Opc=MAIN&Control=19160026&password=L19160026&aceptar=ACEPTAR';
-    const html = await this.LoadHTML(url);
+    let html = await this.LoadHTML(url);
     if (html == "") {
       return false;
     }
-    let doc = new DomParser().parseFromString(html, "text/html");
-    let title = doc.getElementsBySelector("title")[0].textContent;
-    if (title == "SIE Estudiantes") {
+
+    const doc = IDOMParser.parse(html);
+    const title = doc.documentElement.querySelector("title").textContent;
+
+    if (title == "SIE ESTUDIANTES") {
       return false;
     }
 
-    let pass = "" + doc.getElementsBySelector("FRAME")[0].getAttribute("SRC");
-    pass = pass.substr(pass.indexOf("Password") + 9);
-    this.password = pass.substr(0, pass.length - 8);
+    let pass =
+      "" + doc.documentElement.querySelector("frame").getAttribute("SRC");
+    pass = pass.substr(pass.indexOf("PASSWORD") + 9);
+    this.passwordToken = pass.substr(0, pass.length - 8);
 
     await this.ObtenerDatosDeAlumno();
-    this.ObtenerKardex();
-    this.ObtenerHorario();
+    await this.ObtenerKardex();
+    await this.ObtenerHorario();
     return true;
   }
 
@@ -90,11 +113,11 @@ class Alumno {
       "http://201.164.155.162/cgi-bin/sie.pl?Opc=DATOSALU&Control=" +
       this.control +
       "&password=" +
-      this.password +
+      this.passwordToken +
       "&aceptar=ACEPTAR";
     const html = await this.LoadHTML(url);
-    let doc = new DomParser().parseFromString(html, "text/html");
-    let datos = doc.getElementsBySelector("strong");
+    const doc = IDOMParser.parse(html);
+    let datos = doc.documentElement.querySelectorAll("strong");
 
     this.datosGenerales.nombre = datos[3].textContent.trim();
     this.datosGenerales.curp = datos[4].textContent.trim();
@@ -110,7 +133,7 @@ class Alumno {
       .replace(/\(\d+\)/, "")
       .trim();
 
-    datos = doc.getElementsBySelector("p");
+    datos = doc.documentElement.querySelectorAll("p");
     this.datosPersonales.calle = datos[0].textContent.trim();
     this.datosPersonales.noCalle = datos[1].textContent.trim();
     this.datosPersonales.colonia = datos[2].textContent.trim();
@@ -142,15 +165,23 @@ class Alumno {
       "http://201.164.155.162/cgi-bin/sie.pl?Opc=KARDEX&Control=" +
       this.control +
       "&password=" +
-      this.password +
+      this.passwordToken +
       "&aceptar=ACEPTAR";
-    const html = await this.LoadHTML(url);
-    let doc = new DomParser().parseFromString(html, "text/html");
-    let trs = doc.getElementsBySelector("TR");
+    let html = await this.LoadHTML(url);
 
-    for (let i = 5; i < trs.length - 4; i++) {
+    const doc = IDOMParser.parse(html);
+    const title = doc.documentElement.querySelector("title").textContent;
+
+    if (title == "SIE ESTUDIANTES") {
+      return false;
+    }
+
+
+    const tables = doc.documentElement.querySelectorAll("table");
+    let trs = tables[1].querySelectorAll("tr");
+    for (let i = 2; i < trs.length - 4; i++) {
       const tr = trs[i];
-      const tds = tr.getElementsBySelector("TD");
+      const tds = tr.querySelectorAll("td");
       this.kardex.datos.push({
         clave: tds[0].textContent.trim(),
         materia: tds[1].textContent.trim(),
@@ -158,19 +189,25 @@ class Alumno {
         periodo: tds[5].textContent.trim(),
       });
     }
-    //obteniendo el promedio
-    let tds = trs[trs.length - 4].getElementsBySelector("TD");
-    this.kardex.promedio = tds[2].textContent.substr(0, 6).trim();
+    this.kardex.promedio = trs[trs.length - 4]
+      .querySelectorAll("td")[2]
+      .textContent.substr(0, 5);
 
     //obteniendo los creditos
-    tds = trs[trs.length - 3].getElementsBySelector("TD");
-    let creditos = tds[0].textContent.replace("Creditos Acumulados","").trim().split(" de ");
-    this.kardex.creditos = {obtenidos: creditos[0], totales: creditos[1]};
+    trs = tables[2].querySelectorAll("tr");
+    let creditos = trs[0]
+      .querySelector("td")
+      .textContent.replace("CREDITOS ACUMULADOS", "")
+      .trim()
+      .split(" DE ");
+    this.kardex.creditos = { obtenidos: creditos[0], totales: creditos[1] };
 
     //obteniendo el porcentaje de avance
-    tds = trs[trs.length - 2].getElementsBySelector("TD");
-    this.kardex.avance= tds[0].textContent.replace("% de avance:","").trim();
-    console.log(this.kardex);
+    this.kardex.avance = trs[1]
+      .querySelector("td")
+      .textContent.replace("% DE AVANCE:", "")
+      .trim();
+    console.log("");
   }
 
   async ObtenerHorario() {
@@ -178,15 +215,17 @@ class Alumno {
       "http://201.164.155.162/cgi-bin/sie.pl?Opc=HORARIO&Control=" +
       this.control +
       "&password=" +
-      this.password +
+      this.passwordToken +
       "&aceptar=ACEPTAR";
     const html = await this.LoadHTML(url);
-    let doc = new DomParser().parseFromString(html, "text/html");
-    let trs = doc.getElementsBySelector("TR");
-    for (let i = 0; i < trs.length - 4; i++) {
+    const doc = IDOMParser.parse(html);
+    const tables = doc.documentElement.querySelectorAll("table");
+    const trs = tables[1].querySelectorAll("tr");
+    for (let i = 1; i < trs.length ; i++) {
       const tr = trs[i];
-      const tds = tr.getElementsBySelector("TD");
+      const tds = tr.querySelectorAll("td");
 
+      //por materia cada dia de la semana
       for (let j = 7; j <= 11; j++) {
         let horaAulaArray = tds[j].textContent.split(" ");
         let aula = horaAulaArray[1];
@@ -202,7 +241,7 @@ class Alumno {
         }
       }
     }
+    console.log("");
   }
 }
-
 export default Alumno;

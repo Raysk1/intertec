@@ -49,16 +49,16 @@ export default class Horario extends React.Component {
     let materias = [];
 
     var colorArray = [
-      "coral",
-      "pink",
-      "yellow",
-      "blue",
-      "gold",
-      "red",
-      "skyblue",
-      "lime",
-      "green",
-      "purple",
+      "#bf9780",
+      "#fdcae1",
+      "#ffda89",
+      "#84b6f4",
+      "#fdfd96",
+      "#ff6961",
+      "#bae0f5",
+      "#77dd77",
+      "#98f6a9",
+      "#bc98f3",
     ];
 
     global.alumno.horario.forEach((element, index) => {

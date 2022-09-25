@@ -7,6 +7,7 @@ import Horario from "./agenda/Horario";
 import Kardex from "./Kardex";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { verticalScale } from "react-native-size-matters";
+import Settings from "./Setting";
 
 const Tab = createBottomTabNavigator();
 export default function Home() {
@@ -75,6 +76,26 @@ export default function Home() {
           },
           headerShown: false,
           title: "Kardex",
+        })}
+      />
+       <Tab.Screen
+        name="Settings"
+        component={Settings}
+        options={() => ({
+          tabBarIcon: ({ color, focused }) => {
+            // You can return any component that you like here!
+            return (
+              <Ionicons
+                name={
+                  focused ? "settings" : "settings-outline"
+                }
+                size={verticalScale(25)}
+                color={color}
+              />
+            );
+          },
+          headerShown: false,
+          title: "Settings",
         })}
       />
     </Tab.Navigator>
