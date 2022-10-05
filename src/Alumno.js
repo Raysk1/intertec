@@ -44,7 +44,8 @@ class Alumno {
       avance: 0, //porcentaje de avance
     };
     this.horario = [];
-    
+
+    this.calificacionesActuales = [];
   }
 
   fetchXML(url) {
@@ -105,6 +106,7 @@ class Alumno {
     await this.ObtenerDatosDeAlumno();
     await this.ObtenerKardex();
     await this.ObtenerHorario();
+    await this.ObtenerCalificaciones();
     return true;
   }
 
@@ -176,7 +178,6 @@ class Alumno {
       return false;
     }
 
-
     const tables = doc.documentElement.querySelectorAll("table");
     let trs = tables[1].querySelectorAll("tr");
     for (let i = 2; i < trs.length - 4; i++) {
@@ -207,7 +208,6 @@ class Alumno {
       .querySelector("td")
       .textContent.replace("% DE AVANCE:", "")
       .trim();
-    console.log("");
   }
 
   async ObtenerHorario() {
@@ -221,7 +221,7 @@ class Alumno {
     const doc = IDOMParser.parse(html);
     const tables = doc.documentElement.querySelectorAll("table");
     const trs = tables[1].querySelectorAll("tr");
-    for (let i = 1; i < trs.length ; i++) {
+    for (let i = 1; i < trs.length; i++) {
       const tr = trs[i];
       const tds = tr.querySelectorAll("td");
 
@@ -241,7 +241,46 @@ class Alumno {
         }
       }
     }
-    console.log("");
+  }
+
+  async ObtenerCalificaciones() {
+    const url =
+      "http://201.164.155.162/cgi-bin/sie.pl?Opc=CALIF&Control=" +
+      this.control +
+      "&password=" +
+      this.passwordToken +
+      "&aceptar=ACEPTAR";
+    const html = await this.LoadHTML(url);
+    const doc = IDOMParser.parse(html);
+    const tables = doc.documentElement.querySelectorAll("table");
+    const trs = tables[1].querySelectorAll("tr");
+
+    for (let i = 1; i < trs.length; i++) {
+      const tr = trs[i];
+      const tds = tr.querySelectorAll("td");
+      const calificaciones = [];
+      let promedio = 0;
+      for (let j = 5; j < tds.length; j++) {
+        const td = tds[j];
+        const data = td.textContent.trim();
+        if(data != ""){
+          calificaciones.push(data);
+          promedio += Number(data);
+        }
+      }
+
+      promedio = calificaciones.length > 0 ? Math.trunc( calificaciones.reduce((a,b) => Number(a) + Number(b),0)/calificaciones.length) : 0;
+
+      this.calificacionesActuales.push({
+        clave: tds[0].textContent.trim(),
+        materia: tds[2].textContent.trim(),
+        calificaciones: calificaciones,
+        promedio: promedio
+      }
+      );
+    
+    }
+  
   }
 }
 export default Alumno;

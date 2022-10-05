@@ -1,4 +1,4 @@
-import Alumno from "../Alumno"
+
 const initialState = {
   alumno: null
 }
@@ -11,6 +11,7 @@ export default (state = initialState, action) => {
         alumno: action.payload,
       }
     case 'LOGOUT':
+      global.alumno = null;
       return {
         alumno: null,
       }

@@ -54,7 +54,7 @@ const RootNavigation = () => {
       try {
         let alumno = new Alumno(global.alumno.control, global.alumno.password);
         await alumno.validarInicioInicioDeSecion();
-        dispatch(Login(global.alumno));
+        dispatch(Login(alumno));
         status = "success";
         setConnectionStatus({
           isActive: true,

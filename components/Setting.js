@@ -22,7 +22,7 @@ const { height, width } = Dimensions.get("screen");
 export default function Settings() {
   const dispatch = useDispatch();
   const submit = () => {
-    dispatch(Logout())
+    dispatch(Logout());
   }
   return (
     <NativeBaseProvider>
